@@ -9,75 +9,79 @@
 
 	<title>Task 2.2 D3 Drawing with Data - Bar Chart</title>
 	<script src="https://d3js.org/d3.v7.min.js"></script>
-
+	<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-	<h1>The D3 Journey starts here...</h1>
-	<script>
 
-		var w = 500;
-		var h = 150;
-		var barPadding = 3;
+	<div class="topnav">
+    <a class="active" href="Main.html">Home</a>
+    <a href="Lab2.1.html">Lab 2.1</a>
+    <a href="Lab2.2.html">Lab 2.2</a>
+    <a href="Lab2.3.html">Lab 2.3</a>
+		<a href="Lab2.4.html">Lab 2.4</a>
+  </div> 
 
+<script>
+					var w = 500;
+					var h = 300;
+					var dataset = [35,50,55,50,75,80,95,110];
+					var padding = 3;
 
-		var dataset = [14,5,26,23,9];
+					var svg = d3.select("body")
+					.append("svg")
+					.attr("width",w)
+					.attr("height",h);
 
-		var svg= d3.select("body")
-							 .append("svg")
-							 .attr("width", w)
-							 .attr("height", h)
-							 .attr("fill","rgb(106,90,205)");
+					svg.selectAll("rect")
+					.data(dataset)
+					.enter()
+					.append("rect")
+					.attr("x", function(d,i)
+					{
+							return i * (w / dataset.length);
+					})
+					.attr("y",function(d) 
+					{
+							return h - d;
+					})
+					.attr("width",function(d)
+					{
+							return (w / dataset.length-padding)
+					})
+					.attr("height",function(d)
+					{
+							return d;
+					})
+					.attr("fill","limegreen");
 
-
-		svg.selectAll("rect")
-			.data(dataset)
-			.enter()
-			.append("rect")
-			.attr(function(d){
-				return d;
+					svg.selectAll("text")
+					.data(dataset)
+					.enter()
+					.append("text")
+					.text(function(d)
+					{
+							return d;
+					})
+					.attr("fill","black")
+					.attr("x",function(d,i)
+			{
+					return i * (w/dataset.length) + 16;
 			})
-			.attr("x", function(d, i){
-				return i * (w/dataset.length);
-			})
-			.attr("y", function(d){
-				return h - (d*4);
-			})
-			.attr("width", function(d){
-				return (w/dataset.length-barPadding);
-			})
-			.attr("height", function(d){
-				return d * 4;
+			.attr("y",function(d) 
+			{
+					return h - d + 25;
 			});
+					
+					
+
+</script>
 
 
-			
-		svg.selectAll("text")
-			.data(dataset)
-			.enter()
-			.append("text")
-			.text(function(d){
-				return d;
-			})
-			.attr("fill","black")
-			.attr("x", function(d, i){
-				return i * (w/dataset.length);
-			})
-			.attr("y", function(d){
-				return h - (d*4);
-			})
-			.attr("width", function(d){
-				return (w/dataset.length-barPadding);
-			})
-			.attr("height", function(d){
-				return d * 4;
-			});
-			
-	</script>
-
-	<p>New paragraph!</p>
-	<br>
-	<bf>_</bf>
-	<footer styles="color:grey">COS30045 Data Visualization<br> Jorhow Wong </footer>
+	<br>       
+	<br>          
+	<br>          
+		 
+	<footer>COS30045 Data Visualisation</footer>
 </body>
 </html>

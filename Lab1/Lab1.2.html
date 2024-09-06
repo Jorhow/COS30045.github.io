@@ -1,51 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="styles.css">
-<script src="Lab1.1.js"></script>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 1.2</title>
+    <title>Interesting Article</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body style="background-color:bisque">
 
-    <header>
-        <h1>Lab 1.2</h1>
-        <nav>
-            <ul>
-                <li><a href="Lab1.1.html">Lab 1.1</a></li>
-                <li><a href="Lab1.2.html">Lab 1.2</a></li>
-                <li><a href="Lab1.3.html">Lab 1.3</a></li>
-            </ul>
-        </nav>
-    </header>
+<body>
 
-<br>
+    <div class="topnav">
+        <a class="active" href="Main.html">Home</a>
+        <a href="Lab1.1.html">Lab 1.1</a>
+        <a href="Lab1.2.html">Lab 1.2</a>
+        <a href="Lab1.3.html">Lab 1.3</a>
+    </div> 
 
-<button onclick="window.location.href='Main.html'" style="
-background-color: black;
-color: rgb(255, 255, 255); 
-padding: 10px 20px; 
-font-size: 30px; 
-border: none;
-border-radius: 5px;
-cursor: pointer;
-transition: background-color 0.3s ease;">Homepage</button>
+    <div class="container">
+        <h1>Title of Interesting Article</h1>
+        <h2>Author of Interesting Article</h2>
 
-    <div style="text-align: center;">
-        <img id="PetChart" src="pets2019.jpg" width="700px">
-        <!-- Buttons to Change Image -->
-        <button onclick="changeImage('pet2019.png')">Show 2019</button>
-        <button onclick="changeImage('pet2021.png')">Show 2021</button>
-        <button onclick="changeImage('pet_ownership_in_australia_table.png')">Show Pet Ownership</button>
+        <p>
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, 
+            eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam 
+            voluptatem quia voluptas sit <b>aspernatur</b> aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+            voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, 
+            sed quia <em>non numquam eius modi tempora</em> incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+        </p>
 
+        <ul>
+            <li>Lorem ipsum dolor sit.</li>
+            <li>Nulla facilisi. Curabitur scelerisque.</li>
+            <li>Donec ac tristique ipsum.</li>
+            <li>Pellentesque vitae nulla.</li>
+        </ul>
+
+        <figure>
+            <img id="mainImage" src="pet2019.png" alt="Table Image" width="800">
+        </figure>
+
+        <button class="button-3" role="button" onclick="changeImage('pet2019.png')">2019</button>
+        <button class="button-3" role="button" onclick="changeImage('pet2021.png')">2021</button>
+        <button class="button-3" role="button" onclick="changeImage('2019&2021.png')">BOTH</button>
+
+        <p>
+            Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi 
+            consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, 
+            vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+        </p>
+
+        <footer>COS30045 Data Visualisation</footer>
     </div>
 
-    <br>       
-    <br>          
-    <br>          
-       
-    <footer>COS30045 Data Visualisation</footer>
+    <script>
+        function changeImage(imageSrc, captionText) {
+            document.getElementById("mainImage").src = imageSrc;
+            document.getElementById("figCaption").textContent = captionText;
+        }
+    </script>
+
 </body>
 </html>
