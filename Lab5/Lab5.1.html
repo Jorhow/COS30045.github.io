@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="description"	content="Data Visualisation Exercise 1"/>
+	<meta name="keywords"		  content="HTML, CSS"/>
+	<meta name="author"			  content="Jorhow Wong"/>
+
+	<title>Task 2.2 D3 Drawing with Data - Bar Chart</title>
+	<script src="https://d3js.org/d3.v7.min.js"></script>
+	<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+
+	<div class="topnav">
+    <a class="active" href="Main.html">Home</a>
+    <a href="Lab2.1.html">Lab 2.1</a>
+    <a href="Lab2.2.html">Lab 2.2</a>
+    <a href="Lab2.3.html">Lab 2.3</a>
+		<a href="Lab2.4.html">Lab 2.4</a>
+  </div> 
+
+<script>
+					var w = 500;
+					var h = 300;
+					var dataset = [35,50,55,50,75,80,95,110];
+          var xScale = d3.scaleBand()
+          .domain(d3.range(dataset.length))
+          .range([0,w]);
+
+					var svg = d3.select("body")
+					.append("svg")
+					.attr("width",w)
+					.attr("height",h);
+
+					svg.selectAll("rect")
+					.data(dataset)
+					.enter()
+					.append("rect")
+					.attr("x", function(d,i)
+					{
+							return i * (w / dataset.length);
+					})
+					.attr("y",function(d) 
+					{
+							return h - d;
+					})
+					.attr("width",function(d)
+					{
+							return (w / dataset.length-padding)
+					})
+					.attr("height",function(d)
+					{
+							return d;
+					})
+					.attr("fill","limegreen");
+
+					svg.selectAll("text")
+					.data(dataset)
+					.enter()
+					.append("text")
+					.text(function(d)
+					{
+							return d;
+					})
+					.attr("fill","black")
+					.attr("x",function(d,i)
+			{
+					return i * (w/dataset.length) + 16;
+			})
+			.attr("y",function(d) 
+			{
+					return h - d + 25;
+			});
+					
+					
+
+</script>
+
+
+	<br>       
+	<br>          
+	<br>          
+		 
+	<footer>COS30045 Data Visualisation</footer>
+</body>
+</html>
