@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Data Visualisation Exercise 1" />
+    <meta name="keywords" content="HTML, CSS" />
+    <meta name="author" content="Jorhow Wong" />
+    <title>Lab 6.2 D3 Interactivity - Sort</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+    <div class="topnav">
+        <a class="active" href="../Main.html">Home</a>
+        <a href="Lab6.1.html">Lab 6.1</a>
+        <a href="Lab6.2.html">Lab 6.2</a>
+    </div>
+
+    <br>
+    <button class="button-3" id="addBar" role="button">Add</button>
+    <button class="button-3" id="removeBar" role="button">Remove</button>
+    <button class="button-3" id="sort" role="button">Sort</button>
+    <br>
+
+    <script>
+        var w = 500;
+        var h = 300;
+        var padding = 5;
+        var dataset = [24, 10, 29, 19, 8, 15, 20, 12, 9, 6, 21, 20];
+        var maxValue = 25;
+        var ascending = true; // Track sorting order
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        // Scales
+        var xScale = d3.scaleBand()
+            .domain(d3.range(dataset.length))
+            .range([0, w])
+            .paddingInner(0.05);
+
+        var yScale = d3.scaleLinear()
+            .domain([0, d3.max(dataset)])
+            .range([0, h]);
+
+        // Function to update bars
+        function updateBars() {
+            xScale.domain(d3.range(dataset.length));
+            yScale.domain([0, d3.max(dataset)]);
+
+            // Bind data to bars
+            var bars = svg.selectAll("rect")
+                .data(dataset);
+
+            // Enter new bars
+            bars.enter()
+                .append("rect")
+                .attr("x", w) // Start position off-screen to the right
+                .attr("y", function(d) {
+                    return h - yScale(d); // Calculate y position based on height
+                })
+                .attr("width", xScale.bandwidth())
+                .attr("height", function(d) {
+                    return yScale(d); // Set bar height
+                })
+                .attr("fill", "limegreen") // Set default color
+                .on("mouseover", function(event, d) {
+                    // Get current x and y positions of the bar
+                    var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.bandwidth() / 2; // Center the text
+                    var yPosition = parseFloat(d3.select(this).attr("y")) - 10;  // Move text above the bar
+
+                    // Ensure text is not positioned above the SVG (adjust y position)
+                    if (yPosition < 15) {
+                        yPosition = 15;  // Adjust to keep text within view
+                    }
+
+                    // Append tooltip
+                    svg.append("text")
+                        .attr("id", "tooltip")
+                        .attr("x", xPosition)
+                        .attr("y", yPosition)
+                        .attr("text-anchor", "middle")
+                        .attr("fill", "black")
+                        .text(d);
+
+                    // Highlight the bar
+                    d3.select(this)
+                        .attr("fill", "orange");
+                })
+                .on("mouseout", function() {
+                    d3.select("#tooltip").remove(); // Remove tooltip on mouseout
+                    d3.select(this)
+                        .attr("fill", "limegreen"); // Reset to original color
+                })
+                .merge(bars)
+                .transition()
+                .duration(1000)
+                .attr("x", function(d, i) {
+                    return xScale(i); // Position bars based on xScale
+                })
+                .attr("y", function(d) {
+                    return h - yScale(d); // Position bars based on yScale
+                })
+                .attr("width", xScale.bandwidth())
+                .attr("height", function(d) {
+                    return yScale(d); // Set height for bars
+                });
+
+            // Remove old bars with transition to the right
+            bars.exit()
+                .transition()
+                .duration(500)
+                .attr("x", w)  // Slide out to the right
+                .remove();
+        }
+
+        // Sort function
+        var sortBars = function() {
+            ascending = !ascending; // Toggle sorting order
+            svg.selectAll("rect")
+                .sort(function(a, b) {
+                    return ascending ? d3.ascending(a, b) : d3.descending(a, b); // Sort based on order
+                })
+                .transition() // Add transition for the sorting effect
+                .duration(1000)
+                .attr("x", function(d, i) {
+                    return xScale(i); // Update x position based on sorted order
+                });
+        };
+
+        // Initial rendering
+        updateBars();
+
+        // Add bar on button click
+        d3.select("#addBar").on("click", function() {
+            var newNumber = Math.floor(Math.random() * maxValue);
+            dataset.push(newNumber);
+            updateBars();
+        });
+
+        // Remove the first bar on button click
+        d3.select("#removeBar").on("click", function() {
+            dataset.shift();
+            updateBars();
+        });
+
+        // Set up event listener for the sort button
+        d3.select("#sort").on("click", sortBars); // Event listener for sorting
+    </script>
+    <footer>COS30045 Data Visualisation</footer>
+</body>
+</html>
