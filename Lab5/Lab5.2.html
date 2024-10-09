@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Data Visualisation Exercise 1" />
+    <meta name="keywords" content="HTML, CSS" />
+    <meta name="author" content="Jorhow Wong" />
+    <title>Lab 5.2 D3 Transitions</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+    
+    <div class="topnav">
+        <a class="active" href="../Main.html">Home</a>
+        <a href="Lab5.1.html">Lab 5.1</a>
+        <a href="Lab5.2.html">Lab 5.2</a>
+        <a href="Lab5.3.html">Lab 5.3</a>
+    </div>
+
+    <br>
+    <!-- Buttons for different animations -->
+    <button class="button-3" id="staggered" role="button">Staggered Animation</button>
+    <button class="button-3" id="simultaneous" role="button">Simultaneous Animation</button>
+    <button class="button-3" id="slowFast" role="button">Slow-Fast Animation</button>
+    <br>
+
+    <script>
+        var w = 500;
+        var h = 300;
+        var padding = 5;
+        var dataset = [24, 10, 29, 19, 8, 15, 20, 12, 9, 6, 21, 20];
+        var maxValue = 25;
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        // Scales
+        var xScale = d3.scaleBand()
+            .domain(d3.range(dataset.length))
+            .range([0, w])
+            .paddingInner(0.05);
+
+        var yScale = d3.scaleLinear()
+            .domain([0, d3.max(dataset)])
+            .range([0, h]);
+
+        // Create bars
+        svg.selectAll("rect")
+            .data(dataset)
+            .enter()
+            .append("rect")
+            .attr("x", function(d, i) {
+                return xScale(i);
+            })
+            .attr("y", function(d) {
+                return h - yScale(d);
+            })
+            .attr("width", xScale.bandwidth())
+            .attr("height", function(d) {
+                return yScale(d);
+            })
+            .attr("fill", "limegreen");
+
+        // Add labels
+        svg.selectAll("text")
+            .data(dataset)
+            .enter()
+            .append("text")
+            .text(function(d) {
+                return d;
+            })
+            .attr("x", function(d, i) {
+                return xScale(i) + xScale.bandwidth() / 2;
+            })
+            .attr("y", function(d) {
+                return h - yScale(d) + 15;
+            })
+            .attr("text-anchor", "middle")
+            .attr("fill", "black");
+
+        // Update data function
+        function updateData() {
+            dataset = [];
+            for (var i = 0; i < 12; i++) {
+                var newNumber = Math.floor(Math.random() * maxValue);
+                dataset.push(newNumber);
+            }
+            yScale.domain([0, d3.max(dataset)]);
+        }
+
+        // Staggered animation
+        d3.select("#staggered").on("click", function() {
+            updateData();
+
+            svg.selectAll("rect")
+                .data(dataset)
+                .transition()
+                .delay(function(d, i) {
+                    return i * 100; // Delay based on the index for staggered effect
+                })
+                .duration(1000)
+                .ease(d3.easeCubicInOut)
+                .attr("y", function(d) {
+                    return h - yScale(d);
+                })
+                .attr("height", function(d) {
+                    return yScale(d);
+                });
+
+            svg.selectAll("text")
+                .data(dataset)
+                .transition()
+                .delay(function(d, i) {
+                    return i * 100; // Stagger labels too
+                })
+                .duration(1000)
+                .text(function(d) {
+                    return d;
+                })
+                .attr("y", function(d) {
+                    return h - yScale(d) + 15;
+                });
+        });
+
+        // Simultaneous animation
+        d3.select("#simultaneous").on("click", function() {
+            updateData();
+
+            svg.selectAll("rect")
+                .data(dataset)
+                .transition()
+                .duration(1000)
+                .ease(d3.easeCubicInOut)
+                .attr("y", function(d) {
+                    return h - yScale(d);
+                })
+                .attr("height", function(d) {
+                    return yScale(d);
+                });
+
+            svg.selectAll("text")
+                .data(dataset)
+                .transition()
+                .duration(1000)
+                .text(function(d) {
+                    return d;
+                })
+                .attr("y", function(d) {
+                    return h - yScale(d) + 15;
+                });
+        });
+
+        // Slow-fast animation (ease-out-in)
+        d3.select("#slowFast").on("click", function() {
+            updateData();
+
+            svg.selectAll("rect")
+                .data(dataset)
+                .transition()
+                .duration(1500)
+                .ease(d3.easeExpOut) // Slow start, fast finish
+                .attr("y", function(d) {
+                    return h - yScale(d);
+                })
+                .attr("height", function(d) {
+                    return yScale(d);
+                });
+
+            svg.selectAll("text")
+                .data(dataset)
+                .transition()
+                .duration(1500)
+                .ease(d3.easeExpOut)
+                .text(function(d) {
+                    return d;
+                })
+                .attr("y", function(d) {
+                    return h - yScale(d) + 15;
+                });
+        });
+    </script>
+
+    <footer>COS30045 Data Visualisation</footer>
+</body>
+</html>
