@@ -5,7 +5,7 @@
     <meta name="description" content="Data Visualisation Exercise 1" />
     <meta name="keywords" content="HTML, CSS" />
     <meta name="author" content="Jorhow Wong" />
-    <title>Lab 5.2 D3 Transitions</title>
+    <title>LAB 5.3 D3 Adding and Removing Data</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link rel="stylesheet" href="../styles.css">
 </head>
@@ -41,14 +41,14 @@
             .range([0, w])
             .paddingInner(0.05);
 
-        var yScale = d3.scaleLinear()
+// Fixed yScale with maxValue instead of recalculating with d3.max(dataset)
+var yScale = d3.scaleLinear()
             .domain([0, d3.max(dataset)])
             .range([0, h]);
 
-        // Function to update bars
+        // Function to update bars and labels
         function updateBars() {
             xScale.domain(d3.range(dataset.length));
-            yScale.domain([0, d3.max(dataset)]);
 
             // Bind data to bars
             var bars = svg.selectAll("rect")
@@ -65,12 +65,12 @@
                 .attr("height", function(d) {
                     return yScale(d);
                 })
-                .attr("fill", "limegreen")  // New bars in same color
+                .attr("fill", "limegreen") 
                 .merge(bars)
                 .transition()
                 .duration(1000)
                 .attr("x", function(d, i) {
-                    return xScale(i);  // Slide in from the right
+                    return xScale(i);
                 })
                 .attr("y", function(d) {
                     return h - yScale(d);
@@ -87,7 +87,7 @@
                 .attr("x", w)  // Slide out to the right
                 .remove();
 
-            // Update labels
+            // Bind data to labels
             var labels = svg.selectAll("text")
                 .data(dataset);
 
@@ -97,9 +97,9 @@
                 .text(function(d) {
                     return d;
                 })
-                .attr("x", w)  // Start labels off-screen to the right
+                .attr("x", w)  // Start off-screen to the right
                 .attr("y", function(d) {
-                    return h - yScale(d) + 15;
+                    return h - yScale(d) + 15;  // Position above the bar
                 })
                 .attr("text-anchor", "middle")
                 .attr("fill", "black")
@@ -107,13 +107,13 @@
                 .transition()
                 .duration(1000)
                 .attr("x", function(d, i) {
-                    return xScale(i) + xScale.bandwidth() / 2;  // Slide in from the right
+                    return xScale(i) + xScale.bandwidth() / 2;  // Center the label
                 })
                 .attr("y", function(d) {
-                    return h - yScale(d) + 15;
+                    return h - yScale(d) + 15;  // Adjust label position
                 });
 
-            // Remove old labels with transition
+            // Remove old labels
             labels.exit()
                 .transition()
                 .duration(500)
@@ -133,7 +133,7 @@
 
         // Remove the first bar on button click
         d3.select("#removeBar").on("click", function() {
-            dataset.shift();  // Remove the first element
+            dataset.pop();  // Remove the first element
             updateBars();
         });
 
